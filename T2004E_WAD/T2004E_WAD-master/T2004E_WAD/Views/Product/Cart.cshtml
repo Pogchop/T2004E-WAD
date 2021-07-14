@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/Admin_Layout.cshtml";
+    T2004E_WAD.Models.Cart cart = Session["cart"] != null ? (T2004E_WAD.Models.Cart)Session["cart"] : new T2004E_WAD.Models.Cart();
+}
+
+<h2>Gio hang</h2>
+@if(cart.CartItems.Count > 0)
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <th>Id</th>
+            <th>Ten san pham</th>
+            <th>Gia</th>
+            <th>So luong</th>
+            <th>Thanh tien</th>
+            <th></th>
+        </thead>
+        <tbody>
+            @foreach(var item in cart.CartItems)
+            {
+                decimal total = item.Quantity * item.Product.Price;
+                <tr>
+                    <td>@item.Product.Id</td>
+                    <td>@item.Product.Name</td>
+                    <td>@item.Product.Price</td>
+                    <td>@item.Quantity</td>
+                    <td>@total</td>
+                    <td>@Html.ActionLink("Remove", "RemoveItem", new { id = item.Product.Id})</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="text-right" colspan="6">
+                    Grand Total: <span class="text-danger">@cart.GrandTotal</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right" colspan="6">
+                   @Html.ActionLink("CheckOut","CheckOut")
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+}
+else
+{
+    <p>Khong co san pham nao trong gio hang</p>
+}
